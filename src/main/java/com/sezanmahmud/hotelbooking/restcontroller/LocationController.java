@@ -32,7 +32,7 @@ private LocationService locationService;
     }
 
     @PostMapping("/save")
-    public ResponseEntity<String> saveStudents
+    public ResponseEntity<String> saveLocation
             (@RequestPart Location l,
              @RequestParam(value="image",required=true) MultipartFile file) throws IOException {
 
