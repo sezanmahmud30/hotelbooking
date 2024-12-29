@@ -30,6 +30,7 @@ public class HotelController {
         return ResponseEntity.ok(hotels);
     }
 
+    @PostMapping("/save")
     public ResponseEntity<Map<String,String>> saveHotel(
                  @RequestPart(value = "hotel")String hotelJson,
                 @RequestParam(value = "image")MultipartFile file
@@ -39,6 +40,8 @@ public class HotelController {
         Hotel hotel = objectMapper.readValue(hotelJson,Hotel.class);
 
         try{
+
+            hotelService.saveHotel(hotel,file);
             Map<String,String> response = new HashMap<>();
             response.put("Message","Hotel Added Successfully");
 
@@ -53,5 +56,28 @@ public class HotelController {
         }
 
     }
+
+
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Hotel> findHotelById(@PathVariable int id){
+        try{
+            Hotel hotel = hotelService.findHotelById(id);
+
+            return ResponseEntity.ok(hotel);
+        }
+        catch(RuntimeException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+    }
+
+    @GetMapping("/h/searchhotel")
+    public ResponseEntity<List<Hotel>> findHotelByLocationName(@RequestParam(value = "locationName")String locationName){
+
+        List<Hotel>hotels = hotelService.findHotelByLocationName(locationName);
+
+        return ResponseEntity.ok(hotels);
+    }
+
 
 }
