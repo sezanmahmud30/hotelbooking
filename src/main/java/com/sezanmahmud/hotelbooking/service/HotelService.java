@@ -60,6 +60,17 @@ public class HotelService {
                 .orElseThrow(() -> new EntityNotFoundException("Hotel not found with Id: " + id));
     }
 
+
+
+    public Hotel findHotelByName(String name) {
+
+        return hotelRepository.findByName(name)
+
+                .orElseThrow(() -> new EntityNotFoundException("Hotel not found with Name: " + name));
+    }
+
+
+
     public void updateHotel(int id,Hotel updateHotel,MultipartFile image) throws IOException {
 
         Hotel existingHotel = hotelRepository.findById(id)
