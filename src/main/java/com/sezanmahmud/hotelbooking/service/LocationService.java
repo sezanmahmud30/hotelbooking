@@ -57,12 +57,19 @@ public class LocationService {
         locationRepository.deleteById(id);
     }
 
-    public Location updateLocation(int id, Location updateLocation) {
+    public Location updateLocation(int id, Location updateLocation,MultipartFile image) throws IOException {
         Location existingLocation = locationRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Location not found with Id: " + id));
 
         if (updateLocation.getName() != null) {
             existingLocation.setName(updateLocation.getName());
+
+        }
+
+        if(image != null && !image.isEmpty()) {
+
+            String filename=saveImage(image,existingLocation);
+            existingLocation.setImage(filename);
 
         }
 
