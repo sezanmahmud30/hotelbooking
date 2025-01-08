@@ -68,8 +68,8 @@ public class LocationService {
 
         if(image != null && !image.isEmpty()) {
 
-            String filename=saveImage(image,existingLocation);
-            existingLocation.setImage(filename);
+            String fileName=saveImage(image,existingLocation);
+            existingLocation.setImage(fileName);
 
         }
 

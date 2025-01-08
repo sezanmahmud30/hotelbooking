@@ -1,6 +1,5 @@
 package com.sezanmahmud.hotelbooking.restcontroller;
 
-
 import com.sezanmahmud.hotelbooking.entity.Location;
 import com.sezanmahmud.hotelbooking.service.LocationService;
 import jakarta.persistence.EntityNotFoundException;
@@ -57,7 +56,8 @@ private LocationService locationService;
     @PutMapping("/update/{id}")
     public ResponseEntity<Location> updateLocation(
             @PathVariable int id,
-            @RequestPart Location l,@RequestParam(value="image",required=true) MultipartFile file) throws IOException {
+            @RequestPart Location l,
+            @RequestParam(value="image",required=true) MultipartFile file) throws IOException {
 
         Location updateLocation = locationService.updateLocation(id, l,file);
 

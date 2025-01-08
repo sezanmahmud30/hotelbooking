@@ -2,7 +2,6 @@ package com.sezanmahmud.hotelbooking.service;
 
 
 import com.sezanmahmud.hotelbooking.entity.Hotel;
-
 import com.sezanmahmud.hotelbooking.entity.Location;
 import com.sezanmahmud.hotelbooking.repository.HotelRepository;
 import com.sezanmahmud.hotelbooking.repository.LocationRepository;
@@ -71,7 +70,7 @@ public class HotelService {
 
 
 
-    public void updateHotel(int id,Hotel updateHotel,MultipartFile image) throws IOException {
+    public Hotel updateHotel(int id, Hotel updateHotel, MultipartFile image) throws IOException {
 
         Hotel existingHotel = hotelRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Hotel not found with Id: " + id));
@@ -99,6 +98,7 @@ public class HotelService {
             existingHotel.setImage(filename);
 
         }
+        return hotelRepository.save(existingHotel);
 
     }
 
@@ -118,10 +118,11 @@ public class HotelService {
             Files.createDirectories(uploadPath);
         }
 
-        String fileName = h.getName() + "_" + UUID.randomUUID().toString();
+        String fileName = h.getName()+"_"+ UUID.randomUUID().toString();
         //Sezan Mahmud_gddsuhkjsdjxfu
 
         Path filePath=uploadPath.resolve(fileName);
+
         Files.copy(file.getInputStream(), filePath);
 
         return fileName;
