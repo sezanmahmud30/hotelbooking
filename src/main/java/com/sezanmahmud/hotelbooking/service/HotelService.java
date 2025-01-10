@@ -108,6 +108,12 @@ public class HotelService {
     }
 
 
+    public void deleteHotel(int id) {
+        if (!hotelRepository.existsById(id)) {
+            throw new EntityNotFoundException("Hotel not found with Id: " + id);
+        }
+        hotelRepository.deleteById(id);
+    }
 
 
 
