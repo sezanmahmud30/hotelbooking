@@ -98,8 +98,8 @@ public class HotelService {
             existingHotel.setImage(filename);
 
         }
-        return hotelRepository.save(existingHotel);
 
+        return updateHotel;
     }
 
     public List<Hotel> findHotelByLocationName(String locationName) {
@@ -111,10 +111,10 @@ public class HotelService {
     public void deleteHotel(int id) {
         if (!hotelRepository.existsById(id)) {
             throw new EntityNotFoundException("Hotel not found with Id: " + id);
+        } else {
+            hotelRepository.deleteById(id);
         }
-        hotelRepository.deleteById(id);
     }
-
 
 
     private String saveImage(MultipartFile file, Hotel h) throws IOException {

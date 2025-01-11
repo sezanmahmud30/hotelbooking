@@ -53,6 +53,7 @@ private LocationService locationService;
 
         }
     }
+
     @PutMapping("/update/{id}")
     public ResponseEntity<Location> updateLocation(
             @PathVariable int id,

@@ -4,13 +4,16 @@ package com.sezanmahmud.hotelbooking.restcontroller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sezanmahmud.hotelbooking.entity.Hotel;
+import com.sezanmahmud.hotelbooking.entity.Location;
 import com.sezanmahmud.hotelbooking.service.HotelService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -87,6 +90,30 @@ public class HotelController {
         return ResponseEntity.ok(hotel);
     }
 
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<String>deleteHotel(@PathVariable  int id) {
 
+        try {
+            hotelService.deleteHotel(id);
+            return ResponseEntity.ok("Hotel with this ID " + id + " has been Deleted");
+
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+
+        }
+    }
+
+    @PutMapping("/update/{id}")
+    public ResponseEntity<Hotel> updateHotel(
+            @PathVariable int id,
+            @RequestPart Hotel hotel,
+            @RequestParam(value="image",required=true) MultipartFile file) throws IOException {
+
+        Hotel updateHotel = hotelService.updateHotel(id, hotel,file);
+
+        return ResponseEntity.ok(updateHotel);
+    }
 
 }
+
+

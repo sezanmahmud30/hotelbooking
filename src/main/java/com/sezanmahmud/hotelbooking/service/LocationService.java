@@ -53,8 +53,9 @@ public class LocationService {
     public void deleteLocation(int id) {
         if (!locationRepository.existsById(id)) {
             throw new EntityNotFoundException("Location not found with Id: " + id);
+        } else {
+            locationRepository.deleteById(id);
         }
-        locationRepository.deleteById(id);
     }
 
     public Location updateLocation(int id, Location updateLocation,MultipartFile image) throws IOException {
