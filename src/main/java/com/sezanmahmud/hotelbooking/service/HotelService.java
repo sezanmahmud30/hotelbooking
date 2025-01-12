@@ -8,6 +8,7 @@ import com.sezanmahmud.hotelbooking.repository.LocationRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -99,7 +100,7 @@ public class HotelService {
 
         }
 
-        return updateHotel;
+        return hotelRepository.save(existingHotel);
     }
 
     public List<Hotel> findHotelByLocationName(String locationName) {
