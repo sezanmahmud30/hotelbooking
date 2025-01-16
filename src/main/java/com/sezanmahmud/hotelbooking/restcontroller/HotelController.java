@@ -69,25 +69,9 @@ public class HotelController {
 
             return ResponseEntity.ok(hotel);
         }
-        catch(RuntimeException e){
+        catch(Exception e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
-    }
-
-    @GetMapping("/h/searchhotel")
-    public ResponseEntity<List<Hotel>> findHotelByLocationName(@RequestParam(value = "locationName")String locationName){
-
-        List<Hotel>hotels = hotelService.findHotelByLocationName(locationName);
-
-        return ResponseEntity.ok(hotels);
-    }
-
-    @GetMapping("/h/searchhotel")
-    public ResponseEntity<Hotel> findHotelByName(@RequestParam(value = "name")String name){
-
-        Hotel hotel = hotelService.findHotelByName(name);
-
-        return ResponseEntity.ok(hotel);
     }
 
     @DeleteMapping("/delete/{id}")
@@ -102,6 +86,23 @@ public class HotelController {
 
         }
     }
+
+    @GetMapping("/h/searchhotel")
+    public ResponseEntity<List<Hotel>> findHotelByLocationName(@RequestParam(value = "locationName")String locationName){
+
+        List<Hotel>hotels = hotelService.findHotelByLocationName(locationName);
+
+        return ResponseEntity.ok(hotels);
+    }
+
+    @GetMapping("/h/searchhotelname")
+    public ResponseEntity<Hotel> findHotelByName(@RequestParam(value = "name")String name){
+
+        Hotel hotel = hotelService.findHotelByName(name);
+
+        return ResponseEntity.ok(hotel);
+    }
+
 
     @PutMapping("/update/{id}")
     public ResponseEntity<Hotel> updateHotel(
