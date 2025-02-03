@@ -2,7 +2,6 @@ package com.sezanmahmud.hotelbooking.service;
 
 
 import com.sezanmahmud.hotelbooking.entity.Hotel;
-import com.sezanmahmud.hotelbooking.entity.Location;
 import com.sezanmahmud.hotelbooking.entity.Room;
 import com.sezanmahmud.hotelbooking.repository.HotelRepository;
 import com.sezanmahmud.hotelbooking.repository.RoomRepository;
@@ -71,10 +70,12 @@ public class RoomService {
                 .orElseThrow(() -> new EntityNotFoundException("Room not found with Id: " + id));
 
         existingRoom.setName(updateRoom.getName());
+        //  existingRoom.setImage(updateRoom.getImage());
         existingRoom.setPrice(updateRoom.getPrice());
         existingRoom.setArea(updateRoom.getArea());
         existingRoom.setAdultNo(updateRoom.getAdultNo());
         existingRoom.setChildNo(updateRoom.getChildNo());
+        //  existingRoom.setHotel(updateRoom.getHotel());
 
         //Update Location -
 
