@@ -2,6 +2,7 @@ package com.sezanmahmud.hotelbooking.service;
 
 
 import com.sezanmahmud.hotelbooking.entity.AuthenticationResponse;
+import com.sezanmahmud.hotelbooking.entity.Role;
 import com.sezanmahmud.hotelbooking.entity.Token;
 import com.sezanmahmud.hotelbooking.entity.User;
 import com.sezanmahmud.hotelbooking.jwt.JwtService;
@@ -60,7 +61,39 @@ public class AuthService {
 
     public AuthenticationResponse register(User user){
 
-       return null;
+        // We chack that Already any user excit with this Email
+
+        if(userRepository.findByEmail(user.getEmail()).isPresent()){
+
+            return new AuthenticationResponse(null,"User Already Exists");
+        }
+
+        // Encode User Password to save DB
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setRole(Role.valueOf("USER"));
+        user.setLock(true);
+        user.setActive(false);
+
+        userRepository.save(user);
+
+        String jwt = jwtService.generateToken(user);
+
+        saveUserToken(jwt, user);
+
+
+        sendActivationEmail(user);
+
+       return new AuthenticationResponse(jwt,"User Registation was Successful");
+    }
+
+    private void sendActivationEmail(User user) {
+
+        String activationLink = "http://localhost:8087/active/" + user.getId();
+        String mailText= """
+                
+                
+                
+                """
     }
 
 

@@ -201,4 +201,7 @@ public class User implements UserDetails {
     }
 
 
+    public void setLock(boolean b) {
+    }
 }
+    
