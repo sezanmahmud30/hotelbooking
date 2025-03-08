@@ -8,7 +8,9 @@ import com.sezanmahmud.hotelbooking.entity.User;
 import com.sezanmahmud.hotelbooking.jwt.JwtService;
 import com.sezanmahmud.hotelbooking.repository.TokenRepository;
 import com.sezanmahmud.hotelbooking.repository.UserRepository;
+import jakarta.mail.MessagingException;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +25,7 @@ public class AuthService {
     private final TokenRepository tokenRepository ;
     private final AuthenticationManager authenticationManager ;
     private final EmailService emailService ;
+
 
 
     public AuthService(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtService jwtService, TokenRepository tokenRepository, AuthenticationManager authenticationManager, EmailService emailService) {
@@ -89,12 +92,53 @@ public class AuthService {
     private void sendActivationEmail(User user) {
 
         String activationLink = "http://localhost:8087/active/" + user.getId();
-        String mailText= """
-                
-                
-                
-                """
+        String mailText="<h2> Dear </h2> "+user.getName()+","
+                +"<p> Pls Click on the following link to confirm your Registration </p>"
+                +"<a href= \""+activationLink+"\">Active Account </a>";
+
+        String subject = "Confirm Registration";
+
+
+        try {
+            emailService.sendSimpleEmail(user.getEmail(), subject, mailText);
+        }catch (MessagingException e){
+            throw new RuntimeException();
+        }
     }
 
 
+    public AuthenticationResponse authenticate(User request) {
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        request.getUsername(),
+                        request.getPassword()
+                )
+        );
+
+        User user = userRepository.findByEmail(request.getEmail()).orElseThrow();
+
+        // Generate token for  current user
+        String jwt = jwtService.generateToken(user);
+
+        //Remove all existing token for this user
+        removeAllTokenByUser(user);
+
+        saveUserToken(jwt, user);
+        return new AuthenticationResponse(jwt, "User Login successful");
+    }
+
+    public String activeUser(long id){
+
+        User user = userRepository.findById(id)
+                .orElseThrow(()-> new RuntimeException("User not found with this id:" + id));
+
+        if (user != null){
+            user.setActive(true);
+            userRepository.save(user);
+            return "User added successfully!";
+        }else {
+            return "Invalid Activation token!";
+        }
+
+    }
 }

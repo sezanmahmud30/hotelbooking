@@ -9,25 +9,22 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class EmailService {
-
     private final JavaMailSender javaMailSender;
+
 
     public EmailService(JavaMailSender javaMailSender) {
         this.javaMailSender = javaMailSender;
     }
 
-
-    public void sendSimpleMail(String to, String subject, String body) throws MessagingException {
-
-        MimeMessage massage = javaMailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(massage, true);
-
+    public void sendSimpleEmail(String to, String subject, String body) throws MessagingException {
+        MimeMessage message = javaMailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message, true);
         helper.setTo(to);
         helper.setSubject(subject);
-        helper.setText(body);
+        helper.setText(body,true);
 
-        javaMailSender.send(massage);
+        javaMailSender.send(message);
+
     }
-
 
 }
