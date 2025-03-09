@@ -20,50 +20,43 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
-
 public class SecurityConfig {
 
     @Autowired
     private UserService userService;
-
     @Autowired
-    private JwtAuthenticationFilter jwtAuthenticationFilter;
+    private JwtAuthenticationFilter authenticationFilter;
 
 
+
+    @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-
-        return
-                http
-                        .csrf(AbstractHttpConfigurer::disable)
-                        .cors(Customizer.withDefaults())
-                        .authorizeHttpRequests(
-                                req->
-                                        req.requestMatchers("/login","register")
-                                                .permitAll()
-                                                .requestMatchers("/api/**")
-                                                .hasAnyAuthority("USER")
-                        )
-                        .userDetailsService(userService)
-                        .sessionManagement(
-                                session->
-                                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                        )
-                        .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class)
-                        .build();
-
+        return http
+                .csrf(AbstractHttpConfigurer::disable)
+                .cors(Customizer.withDefaults())
+                .authorizeHttpRequests(
+                        req->req.requestMatchers("/login","/register")
+                                .permitAll()
+                                .requestMatchers("/api/**")
+                                .hasAuthority("USER")
+                )
+                .userDetailsService(userService)
+                .sessionManagement(
+                        session ->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                )
+                .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .build();
     }
 
 
-     @Bean
-    public PasswordEncoder encoder() {
+    @Bean
+    public PasswordEncoder encoder(){
         return new BCryptPasswordEncoder();
     }
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
-
         return configuration.getAuthenticationManager();
     }
-
 
 }
